@@ -102,9 +102,12 @@ while (jogos <= 299):
                     elif n_pos0 in pp0:
                             saldo_impulsivo
                     else:
-                        nova0 = nome_propriedades[pos_impulsivo]
-                        pp0.append(nova0)
-                        saldo_impulsivo = saldo_impulsivo - propriedades[pos_impulsivo]
+                        if propriedades[pos_impulsivo] > saldo_impulsivo:
+                            saldo_impulsivo
+                        else:
+                            nova0 = nome_propriedades[pos_impulsivo]
+                            pp0.append(nova0)
+                            saldo_impulsivo = saldo_impulsivo - propriedades[pos_impulsivo]
                 elif saldo_impulsivo <= 0:
                     if 0 not in faliu:
                         faliu.append(0)
@@ -139,7 +142,7 @@ while (jogos <= 299):
                     elif n_pos1 in pp1:
                             saldo_exigente
                     else:
-                        if aluguel[pos_exigente] > 50:
+                        if aluguel[pos_exigente] > 50 and propriedades[pos_exigente] < saldo_exigente:
                             nova1 = nome_propriedades[pos_exigente]
                             pp1.append(nova1)
                             saldo_exigente = saldo_exigente - propriedades[pos_exigente]
@@ -224,7 +227,7 @@ while (jogos <= 299):
                     
                     else:
                         compra3 = random.randint(0,1)
-                        if compra3 == 1:
+                        if compra3 == 1 and propriedades[pos_aleatório] < saldo_aleatório:
                             nova3 = nome_propriedades[pos_aleatório]
                             pp3.append(nova3)
                             saldo_aleatório = saldo_aleatório - propriedades[pos_aleatório]
