@@ -84,7 +84,7 @@ while (jogos <= 299):
                 
                 if saldo_impulsivo > 0:
                     dado = random.randint(1,6)
-                    if (pos_impulsivo + dado) >= 20:
+                    if (pos_impulsivo + dado) > 20:
                         pos_impulsivo = (dado +  pos_impulsivo) - 20
                         saldo_impulsivo = saldo_impulsivo + 100
                         
@@ -192,9 +192,9 @@ while (jogos <= 299):
                     
                     else:
                         compra2 = saldo_cauteloso * 0.2
-                        if compra2 >= aluguel[pos_cauteloso]:
+                        if compra2 >= propriedades[pos_cauteloso]:
                             nova2 = nome_propriedades[pos_cauteloso]
-                            pp1.append(nova2)
+                            pp2.append(nova2)
                             saldo_cauteloso = saldo_cauteloso - propriedades[pos_cauteloso]
                         else:
                             saldo_cauteloso
@@ -229,7 +229,7 @@ while (jogos <= 299):
                     elif n_pos3 in pp2:
                             saldo_aleatório = saldo_aleatório - aluguel[pos_aleatório]
                             saldo_cauteloso = saldo_cauteloso + aluguel[pos_aleatório]
-                    elif n_pos3 in pp2:
+                    elif n_pos3 in pp3:
                             saldo_aleatório
                     
                     else:
