@@ -73,7 +73,7 @@ while (jogos <= 299):
             break
     rodadas = 0   
     e = 0
-    while(rodadas <= 999) and len(faliu) < 3:
+    while(rodadas <= 999) and len(faliu) <= 3:
         jogadores = 0
         i=0
         
@@ -84,7 +84,7 @@ while (jogos <= 299):
                 
                 if saldo_impulsivo > 0:
                     dado = random.randint(1,6)
-                    if (pos_impulsivo + dado) >= 20:
+                    if (pos_impulsivo + dado) > 20:
                         pos_impulsivo = (dado +  pos_impulsivo) - 20
                         saldo_impulsivo = saldo_impulsivo + 100
                         
@@ -125,7 +125,7 @@ while (jogos <= 299):
                 
                 if saldo_exigente > 0:
                     dado = random.randint(1,6)
-                    if (pos_exigente + dado) >= 21:
+                    if (pos_exigente + dado) > 20:
                         pos_exigente = (dado +  pos_exigente) - 20
                         saldo_exigente = saldo_exigente + 100
                         pos_exigente = pos_exigente + dado
@@ -192,9 +192,9 @@ while (jogos <= 299):
                     
                     else:
                         compra2 = saldo_cauteloso * 0.2
-                        if compra2 >= aluguel[pos_cauteloso]:
+                        if compra2 >= propriedades[pos_cauteloso]:
                             nova2 = nome_propriedades[pos_cauteloso]
-                            pp1.append(nova2)
+                            pp2.append(nova2)
                             saldo_cauteloso = saldo_cauteloso - propriedades[pos_cauteloso]
                         else:
                             saldo_cauteloso
@@ -229,7 +229,7 @@ while (jogos <= 299):
                     elif n_pos3 in pp2:
                             saldo_aleatório = saldo_aleatório - aluguel[pos_aleatório]
                             saldo_cauteloso = saldo_cauteloso + aluguel[pos_aleatório]
-                    elif n_pos3 in pp2:
+                    elif n_pos3 in pp3:
                             saldo_aleatório
                     
                     else:
@@ -291,7 +291,7 @@ while (jogos <= 299):
             melhor_jogador = "Cauteloso"
         elif v3 > v0 and v3 > v1 and v3 > v2:    
             melhor_jogador = "Aleatório"
-                
+    print(faliu)
     z.append(e)    
     jogos +=1
     num_rod = []
@@ -309,11 +309,5 @@ print("vitórias Perfil Exigente: " + str(v1*100)+"%")
 print("vitórias Perfil Cauteloso: " + str(v2*100)+"%")
 print("vitórias Perfil Aleatório: " + str(v3*100)+"%")
 print("Melhor jogador é: " + melhor_jogador)
+print(z)
 input()
-
-
-
-    
-    
-
-
