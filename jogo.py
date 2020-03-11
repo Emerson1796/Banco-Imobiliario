@@ -23,6 +23,10 @@ v1 = 0
 v2 = 0
 v3 = 0
 
+#variaveis de controle de rodadas jogadas
+e = 0
+z = []
+
 while (jogos <= 299):
     
     #ordem de jogo
@@ -67,10 +71,13 @@ while (jogos <= 299):
             cont +=1
         if cont >=4:
             break
-    rodadas = 0
+    rodadas = 0   
+    e = 0
     while(rodadas <= 999) and len(faliu) < 3:
         jogadores = 0
         i=0
+        
+        e += 1
         while i < 3:
                        
             if ordem[jogadores] == 0:
@@ -284,13 +291,14 @@ while (jogos <= 299):
             melhor_jogador = "Cauteloso"
         elif v3 > v0 and v3 > v1 and v3 > v2:    
             melhor_jogador = "Aleatório"
-        
-            
+                
+    z.append(e)    
     jogos +=1
     num_rod = []
-    num_rod.append(rodadas)
-    med_rod = np.mean(num_rod)
-    time_out = num_rod.count(1000)
+    med_rod = np.mean(z)
+    time_out = z.count(1000)
+
+    
     
     
 
