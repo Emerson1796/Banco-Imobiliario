@@ -1,318 +1,166 @@
 import random
 import numpy as np
 
+#1 = O jogador impulsivo ---> O jogador impulsivo compra qualquer propriedade sobre a qual ele parar.
+#2 = O jogador exigente ---> O jogador exigente compra qualquer propriedade, desde que o valor do aluguel dela seja maior do que 50.
+#3 = O jogador cauteloso ---> O jogador cauteloso compra qualquer propriedade desde que ele tenha uma reserva de 80 saldo sobrando depois de realizada a compra.
+#4 = O jogador aleatório ---> O jogador aleatório compra a propriedade que ele parar em cima com probabilidade de 50%.
 
-def programa():
+def game():
     #partidas jogadas
     jogos = 0
 
-    #propriedades e alugueis
-    nome_propriedades =["Inicio", "Jardim Botânico", "Av. Niemeyer", "Av. Paulista", "Av. Beira Mar"
-                        , "Praça da Sé", "Praça dos Três Poderes", "Ponte Rio-Niterói", "Ponte Guaíba"
-                        , "Av. do Contorno", "Barra da Tijuca", "Marina da Glória", "Praça Castro Alves", "Av. São João"
-                        , "Av. Recife", "Av. Ipiranga", "Av. Ibirapuera", "Av. Juscelino Kubitschek", "Rua Oscar Freire", "Higienópolis", "Jardins"]
-    propriedades = [0, 50, 50, 100, 50, 100, 200, 150, 100, 200, 150, 150, 200, 50, 100, 50, 150, 150, 150, 200, 200]
-    aluguel =      [0, 12, 4, 24, 8, 32, 56, 52, 20, 52, 44, 44, 52, 12, 20, 16, 36, 40, 52, 70, 100]
+    #controle de rodadas
+    x = []
+    
+    #vitorias
+    vitórias = []
+    rod_jogadas = []
+    
+    while jogos < 300:
+        #propriedades e alugueis
+        propriedades = dict()
+        propriedades[0] = {'posição' : 0, 'nome': 'Inicio', 'valor': 0, 'aluguel': 0, 'dono': "iniciar"}
+        propriedades[1] = {'posição' : 1, 'nome': 'Jardim Botânico', 'valor': 50, 'aluguel': 12, 'dono': "null"}
+        propriedades[2] = {'posição' : 2, 'nome':  'Praça da Sé', 'valor': 50, 'aluguel': 4, 'dono': "null"}
+        propriedades[3] = {'posição' : 3, 'nome':  'Av. do Contorno', 'valor': 100, 'aluguel': 24, 'dono': "null"}
+        propriedades[4] = {'posição' : 4, 'nome':  'Av. Recife', 'valor': 50, 'aluguel': 8, 'dono': "null"}
+        propriedades[5] = {'posição' : 5, 'nome':  'Av. Niemeyer', 'valor': 100, 'aluguel': 32, 'dono': "null"}
+        propriedades[6] = {'posição' : 6, 'nome':  'Praça dos Três Poderes', 'valor': 200, 'aluguel': 56, 'dono': "null"}
+        propriedades[7] = {'posição' : 7, 'nome':  'Barra da Tijuca', 'valor': 150, 'aluguel': 52, 'dono': "null"}
+        propriedades[8] = {'posição' : 8, 'nome':  'Av. Ipiranga', 'valor': 100, 'aluguel': 20, 'dono': "null"}
+        propriedades[9] = {'posição' : 9, 'nome':  'Av. Paulista', 'valor': 200, 'aluguel': 52, 'dono': "null"}
+        propriedades[10] = {'posição' : 10, 'nome':  'Ponte Rio-Niterói', 'valor': 150, 'aluguel': 44, 'dono': "null"}
+        propriedades[11] = {'posição' : 11, 'nome':  'Marina da Glória', 'valor': 150, 'aluguel': 44, 'dono': "null"}
+        propriedades[12] = {'posição' : 12, 'nome':  'Av. Ibirapuera', 'valor': 200, 'aluguel': 52, 'dono': "null"}
+        propriedades[13] = {'posição' : 13, 'nome':  'Av. Beira Mar', 'valor': 50, 'aluguel': 12, 'dono': "null"}
+        propriedades[14] = {'posição' : 14, 'nome':  'Ponte Guaíba', 'valor': 100, 'aluguel': 20, 'dono': "null"}
+        propriedades[15] = {'posição' : 15, 'nome':  'Praça Castro Alves', 'valor': 50, 'aluguel': 16, 'dono': "null"}
+        propriedades[16] = {'posição' : 16, 'nome':  'Av. Juscelino Kubitschek', 'valor': 150, 'aluguel': 36, 'dono': "null"}
+        propriedades[17] = {'posição' : 17, 'nome':  'Av. São João', 'valor': 150, 'aluguel': 40, 'dono': "null"}
+        propriedades[18] = {'posição' : 18, 'nome':  'Rua Oscar Freire', 'valor': 150, 'aluguel': 52, 'dono': "null"}
+        propriedades[19] = {'posição' : 19, 'nome':  'Higienópolis', 'valor': 200, 'aluguel': 70, 'dono': "null"}
+        propriedades[20] = {'posição' : 20, 'nome':  'Jardins', 'valor': 200, 'aluguel': 100, 'dono': "null"}
 
-    #0 = O jogador impulsivo ---> O jogador impulsivo compra qualquer propriedade sobre a qual ele parar.
-    #1 = O jogador exigente ---> O jogador exigente compra qualquer propriedade, desde que o valor do aluguel dela seja maior do que 50.
-    #2 = O jogador cauteloso ---> O jogador cauteloso compra qualquer propriedade desde que ele tenha uma reserva de 80 saldo sobrando depois de realizada a compra.
-    #3 = O jogador aleatório ---> O jogador aleatório compra a propriedade que ele parar em cima com probabilidade de 50%.
+        #jogadores
+        jogadores = dict()
+        jogadores[1] = {'ID': 1 ,'jogador':'impulsivo', 'saldo': 300, 'pos_jog': 0, 'status':'ok'}
+        jogadores[2] = {'ID': 2 ,'jogador':'exigente', 'saldo': 300, 'pos_jog': 0, 'status':'ok'}
+        jogadores[3] = {'ID': 3 ,'jogador':'cauteloso', 'saldo': 300, 'pos_jog': 0, 'status':'ok'}
+        jogadores[4] = {'ID': 4 ,'jogador':'aleatório', 'saldo': 300, 'pos_jog': 0, 'status':'ok'}
 
-    #vitorias individuais
-    v0 = 0
-    v1 = 0
-    v2 = 0
-    v3 = 0
+        #controle de falência
+        faliu = 0
+        z = 1
 
-    #variaveis de controle de rodadas jogadas
-    e = 0
-    z = []
-
-    while (jogos <= 299):
-        
-        #ordem de jogo
-        ordem = []
+        #ordem
+        ordem =[]
         cont = 0
-        i = 0
-        
-        #numero de rodadas
-        rodadas = 0
 
-        #propriedas dos jogadores
-        pp0 = []
-        pp1 = []
-        pp2 = []
-        pp3 = []
-
-
-        #saldo geral
-        saldo = []
-        vitorias = []
-        
-        #posicao
-        pos_impulsivo = 0
-        pos_exigente = 0
-        pos_cauteloso = 0
-        pos_aleatório = 0
-
-        #saldo
-        saldo_impulsivo = 300
-        saldo_exigente = 300
-        saldo_cauteloso = 300
-        saldo_aleatório = 300
-
-        jogadores = 0
-
-        faliu =[]
-        
         while True:
-            num = random.randint(0,3)
+            num = random.randint(1,4)
             if num not in ordem:
                 ordem.append(num)
                 cont +=1
             if cont >=4:
                 break
-        rodadas = 0   
-        e = 0
-        while(rodadas <= 999) and len(faliu) < 3:
-            jogadores = 0
-            i=0
-            
-            e += 1
-            while i < 3:
-                           
-                if ordem[jogadores] == 0:
-                    
-                    if saldo_impulsivo > 0:
-                        dado = random.randint(1,6)
-                        if (pos_impulsivo + dado) > 20:
-                            pos_impulsivo = (dado +  pos_impulsivo) - 20
-                            saldo_impulsivo = saldo_impulsivo + 100
-                            
-                                
-                        else:
-                            
-                            pos_impulsivo = pos_impulsivo + dado
-                            
-                        n_pos0 = nome_propriedades[pos_impulsivo]
-                       
-                        if n_pos0 in pp1:
-                                saldo_impulsivo = saldo_impulsivo - aluguel[pos_impulsivo]
-                                saldo_exigente = saldo_exigente + aluguel[pos_impulsivo]
-                               
-                        elif n_pos0 in pp2:
-                                saldo_impulsivo = saldo_impulsivo - aluguel[pos_impulsivo]
-                                saldo_cauteloso = saldo_cauteloso + aluguel[pos_impulsivo]
 
-                        elif n_pos0 in pp3:
-                                saldo_impulsivo = saldo_impulsivo - aluguel[pos_impulsivo]
-                                saldo_aleatório = saldo_aleatório + aluguel[pos_impulsivo]
-                        elif n_pos0 in pp0:
-                                saldo_impulsivo
-                        else:
-                            if propriedades[pos_impulsivo] > saldo_impulsivo:
-                                saldo_impulsivo
-                            else:
-                                nova0 = nome_propriedades[pos_impulsivo]
-                                pp0.append(nova0)
-                                saldo_impulsivo = saldo_impulsivo - propriedades[pos_impulsivo]
-                    elif saldo_impulsivo <= 0:
-                        if 0 not in faliu:
-                            faliu.append(0)
-                            pp0.clear()
-                            break
-                        
-                elif ordem[jogadores] == 1:
-                    
-                    if saldo_exigente > 0:
-                        dado = random.randint(1,6)
-                        if (pos_exigente + dado) >= 21:
-                            pos_exigente = (dado +  pos_exigente) - 20
-                            saldo_exigente = saldo_exigente + 100
-                            pos_exigente = pos_exigente + dado
-                                
-                        elif pos_cauteloso + dado <= 20:
-                            
-                            pos_exigente = pos_exigente + dado
-                            n_pos1 = nome_propriedades[pos_exigente]
-
-                        if n_pos1 in pp0:
-                                saldo_exigente = saldo_exigente - aluguel[pos_exigente]
-                                saldo_impulsivo = saldo_impulsivo + aluguel[pos_exigente]
-                               
-                        elif n_pos1 in pp2:
-                                saldo_exigente = saldo_exigente - aluguel[pos_exigente]
-                                saldo_cauteloso = saldo_cauteloso + aluguel[pos_exigente]
-
-                        elif n_pos1 in pp3:
-                                saldo_exigente = saldo_exigente - aluguel[pos_exigente]
-                                saldo_aleatório = saldo_aleatório + aluguel[pos_exigente]
-                        elif n_pos1 in pp1:
-                                saldo_exigente
-                        else:
-                            if aluguel[pos_exigente] > 50 and propriedades[pos_exigente] < saldo_exigente:
-                                nova1 = nome_propriedades[pos_exigente]
-                                pp1.append(nova1)
-                                saldo_exigente = saldo_exigente - propriedades[pos_exigente]
-                                
-                            else:
-                                saldo_exigente
+        #rodadas
+        rodadas = 1
+        
+        while faliu <= 2 and rodadas <= 999:
+            comp = 0
+            comp_ind = 1
+            while comp <= len(ordem)-1:
+                if jogadores[comp_ind]['saldo'] >= 1:
+                    dado = random.randint(1,6)
+                    if (jogadores[ordem[comp]]['pos_jog'] + dado) >= 21:
+                        jogadores[ordem[comp]]['pos_jog'] = (jogadores[ordem[comp]]['pos_jog'] + dado) - 21
+                        jogadores[ordem[comp]]['saldo'] = jogadores[ordem[comp]]['saldo'] + 100
                     else:
-                        if 1 not in faliu:
-                            faliu.append(1)
-                            pp1.clear()
-                            break
-                        
-                elif ordem[jogadores] == 2:
-                    
-                    if saldo_cauteloso > 0:
-                        dado = random.randint(1,6)
-                        if (pos_cauteloso + dado) >= 21:
-                            pos_cauteloso = (dado +  pos_cauteloso) - 20
-                            saldo_cauteloso = saldo_cauteloso + 100
-                                
-                        elif pos_cauteloso + dado <= 20:
-                            
-                            pos_cauteloso = pos_cauteloso + dado
-                            
-                        n_pos2 = nome_propriedades[pos_cauteloso]
-
-                        if n_pos2 in pp0:
-                                saldo_cauteloso = saldo_cauteloso - aluguel[pos_cauteloso]
-                                saldo_impulsivo = saldo_impulsivo + aluguel[pos_cauteloso]
-                               
-                        elif n_pos2 in pp1:
-                                saldo_cauteloso = saldo_cauteloso - aluguel[pos_cauteloso]
-                                saldo_exigente = saldo_exigente + aluguel[pos_cauteloso]
-
-                        elif n_pos2 in pp3:
-                                saldo_cauteloso = saldo_cauteloso - aluguel[pos_cauteloso]
-                                saldo_aleatório = saldo_aleatório + aluguel[pos_cauteloso]
-                        elif n_pos2 in pp2:
-                                saldo_cauteloso
-                        
-                        else:
-                            compra2 = saldo_cauteloso * 0.2
-                            if compra2 >= propriedades[pos_cauteloso]:
-                                nova2 = nome_propriedades[pos_cauteloso]
-                                pp2.append(nova2)
-                                saldo_cauteloso = saldo_cauteloso - propriedades[pos_cauteloso]
+                        jogadores[ordem[comp]]['pos_jog'] = jogadores[ordem[comp]]['pos_jog'] + dado
+                    if jogadores[ordem[comp]]['ID'] == propriedades[jogadores[ordem[comp]]['pos_jog']]['dono']:
+                        jogadores[ordem[comp]]['saldo']
+                    elif propriedades[jogadores[ordem[comp]]['pos_jog']]['dono'] == 'null' and propriedades[jogadores[ordem[comp]]['pos_jog']]['valor'] < jogadores[ordem[comp]]['saldo']:
+                        if ordem[comp] == 1:
+                            jogadores[ordem[comp]]['saldo'] = jogadores[ordem[comp]]['saldo'] - propriedades[jogadores[ordem[comp]]['pos_jog']]['valor']
+                            propriedades[jogadores[ordem[comp]]['pos_jog']]['dono'] = 1
+                        elif ordem[comp] == 2:
+                            if propriedades[jogadores[ordem[comp]]['pos_jog']]['aluguel'] >= 50:
+                                jogadores[ordem[comp]]['saldo'] = jogadores[ordem[comp]]['saldo'] - propriedades[jogadores[ordem[comp]]['pos_jog']]['valor']
+                                propriedades[jogadores[ordem[comp]]['pos_jog']]['dono'] = 2
                             else:
-                                saldo_cauteloso
-                    else:
-                        if 2 not in faliu:
-                            faliu.append(2)
-                            pp2.clear()
-                            break
-                        
-                elif ordem[jogadores]== 3:
-                    
-                    if saldo_aleatório > 0:
-                        dado = random.randint(1,6)
-                        if (pos_aleatório + dado) >= 21:
-                            pos_aleatório = (dado +  pos_aleatório) - 20
-                            saldo_aleatório = saldo_aleatório + 100
-                                
-                        elif pos_aleatório + dado <= 20:
-                            
-                            pos_aleatório = pos_aleatório + dado
-                            
-                        n_pos3 = nome_propriedades[pos_aleatório]
-
-                        if n_pos3 in pp0:
-                                saldo_aleatório = saldo_aleatório - aluguel[pos_aleatório]
-                                saldo_impulsivo = saldo_impulsivo + aluguel[pos_aleatório]
-                               
-                        elif n_pos3 in pp1:
-                                saldo_aleatório = saldo_aleatório - aluguel[pos_aleatório]
-                                saldo_exigente = saldo_exigente + aluguel[pos_aleatório]
-
-                        elif n_pos3 in pp2:
-                                saldo_aleatório = saldo_aleatório - aluguel[pos_aleatório]
-                                saldo_cauteloso = saldo_cauteloso + aluguel[pos_aleatório]
-                        elif n_pos3 in pp3:
-                                saldo_aleatório
-                        
-                        else:
-                            compra3 = random.randint(0,1)
-                            if compra3 == 1 and propriedades[pos_aleatório] < saldo_aleatório:
-                                nova3 = nome_propriedades[pos_aleatório]
-                                pp3.append(nova3)
-                                saldo_aleatório = saldo_aleatório - propriedades[pos_aleatório]
+                                 jogadores[ordem[comp]]['saldo']
+                        elif ordem[comp] == 3:
+                            saldo_ver_3 = jogadores[ordem[comp]]['saldo'] * 0.20
+                            if propriedades[jogadores[ordem[comp]]['pos_jog']]['valor'] <= saldo_ver_3:
+                                jogadores[ordem[comp]]['saldo'] = jogadores[ordem[comp]]['saldo'] - propriedades[jogadores[ordem[comp]]['pos_jog']]['valor']
+                                propriedades[jogadores[ordem[comp]]['pos_jog']]['dono'] = 3
                             else:
-                                saldo_aleatório
-                                
+                                 jogadores[ordem[comp]]['saldo']
+                        elif ordem[comp] == 4:
+                            saldo_ver_4 = random.randint(0,1)
+                            if  saldo_ver_4 == 1:
+                                jogadores[ordem[comp]]['saldo'] = jogadores[ordem[comp]]['saldo'] - propriedades[jogadores[ordem[comp]]['pos_jog']]['valor']
+                                propriedades[jogadores[ordem[comp]]['pos_jog']]['dono'] = 4
+                    elif propriedades[jogadores[ordem[comp]]['pos_jog']]['dono'] == 'iniciar':
+                        jogadores[ordem[comp]]['saldo']
+                    elif propriedades[jogadores[ordem[comp]]['pos_jog']]['dono'] == 'null'and propriedades[jogadores[ordem[comp]]['pos_jog']]['valor'] >= jogadores[ordem[comp]]['saldo']:
+                        jogadores[ordem[comp]]['saldo']
                     else:
-                        if 3 not in faliu:
-                            faliu.append(3)
-                            pp3.clear()
-                            break
-                
-                jogadores += 1
-
-                i += 1
-                
+                        jogadores[ordem[comp]]['saldo'] = jogadores[ordem[comp]]['saldo'] - propriedades[jogadores[ordem[comp]]['pos_jog']]['aluguel']
+                        jogadores[ propriedades[jogadores[ordem[comp]]['pos_jog']]['dono']]['saldo'] = propriedades[jogadores[ordem[comp]]['pos_jog']]['aluguel']+ jogadores[ propriedades[jogadores[ordem[comp]]['pos_jog']]['dono']]['saldo']
+                else:
+                    jogadores[ordem[comp]]['status'] = 'faliu'
+                    controle = 0
+                    faliu += 1
+                    while controle <=20:
+                        if jogadores[ordem[comp]]['ID'] == propriedades[controle]['dono']:
+                            propriedades[controle]['dono'] = 'null'
+                        controle += 1
+                    del(ordem[comp])
+                comp += 1
+                comp_ind += 1
             rodadas += 1
-
-        k = 0
-        while k <= 3:
-            if ordem[k] == 0:
-                saldo.append(saldo_impulsivo)
-            elif ordem[k] == 1:
-                saldo.append(saldo_exigente)
-            elif ordem[k] == 2:
-                saldo.append(saldo_cauteloso)
-            elif ordem[k] == 3:
-                saldo.append(saldo_aleatório)
             
-            k +=1
-            n_max = max(saldo)
-            n_pos = saldo.index(n_max)
-            
-            if ordem[n_pos] == 0:
-                vitorias.append(0)
-            elif ordem[n_pos] == 1:
-                vitorias.append(1)
-            elif ordem[n_pos] == 2:
-                vitorias.append(2)
-            elif ordem[n_pos] == 3:
-                vitorias.append(3)
-            
-            v0 = vitorias.count(0)/len(vitorias)
-            v1 = vitorias.count(1)/len(vitorias)
-            v2 = vitorias.count(2)/len(vitorias)
-            v3 = vitorias.count(3)/len(vitorias)
+        comp_final = 0
+        saldo_fim = []
+        while comp_final <= len(ordem)-1:
+            saldo_fim.append(jogadores[ordem[comp_final]]['saldo'])
+            comp_final += 1
 
-            if v0 > v1 and v0 > v2 and v0 > v3:
-                melhor_jogador = "Impulsivo"
-            elif v1 > v0 and v1 > v2 and v1 > v3:
-                melhor_jogador = "Exigente"
-            elif v2 > v0 and v2 > v1 and v2 > v3:    
-                melhor_jogador = "Cauteloso"
-            elif v3 > v0 and v3 > v1 and v3 > v2:    
-                melhor_jogador = "Aleatório"
-                    
-        z.append(e)    
-        jogos +=1
-        num_rod = []
-        med_rod = np.mean(z)
-        time_out = z.count(1000)
+        vitórias.append(ordem[saldo_fim.index(max(saldo_fim))])
+        
+        v0 = vitórias.count(1)/len(vitórias)
+        v1 = vitórias.count(2)/len(vitórias)
+        v2 = vitórias.count(3)/len(vitórias)
+        v3 = vitórias.count(4)/len(vitórias)
 
+        if v0 > v1 and v0 > v2 and v0 > v3:
+            melhor_jogador = "Impulsivo"
+        elif v1 > v0 and v1 > v2 and v1 > v3:
+            melhor_jogador = "Exigente"
+        elif v2 > v0 and v2 > v1 and v2 > v3:    
+            melhor_jogador = "Cauteloso"
+        elif v3 > v0 and v3 > v1 and v3 > v2:    
+            melhor_jogador = "Aleatório"
         
+        x.append(rodadas)
+        time_out = x.count(1000)
+        med_rod = np.mean(x)
+        jogos += 1
         
-        
-
-    print("\nMédia de Rodadas: " + str(med_rod))
+    print("\nMédia de Rodadas: " + str("%.2f" % (med_rod)))
     print("Nº de Time Out: " + str(time_out))
-    print("vitórias Perfil Impulsivo: " + str(v0*100)+"%")
-    print("vitórias Perfil Exigente: " + str(v1*100)+"%")
-    print("vitórias Perfil Cauteloso: " + str(v2*100)+"%")
-    print("vitórias Perfil Aleatório: " + str(v3*100)+"%")
+    print("vitórias Perfil Impulsivo: " + str("%.2f" % (v0*100))+"%")
+    print("vitórias Perfil Exigente: " + str("%.2f" % (v1*100))+"%")
+    print("vitórias Perfil Cauteloso: " + str("%.2f" % (v2*100))+"%")
+    print("vitórias Perfil Aleatório: " + str("%.2f" % (v3*100))+"%")
     print("Melhor jogador é: " + melhor_jogador + "\n\n")
-
+                            
 opcao = 0;
 while opcao != "2":
     opcao = input("Digite 1 para iniciar jogo\nDigite 2 para fechar programa\n")
     if opcao == "1":
-        programa()
+        game()
+
